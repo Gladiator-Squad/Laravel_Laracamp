@@ -24,3 +24,8 @@ jobs:
       run: |
         docker-compose up -d
       working-directory: ./app
+
+    - name: Install Composer Dependencies
+      run: |
+        docker-compose exec app ls -l
+      working-directory: ./app
