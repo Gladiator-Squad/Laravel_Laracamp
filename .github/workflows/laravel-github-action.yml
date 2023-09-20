@@ -25,7 +25,7 @@ jobs:
         docker-compose up -d
       working-directory: ./app
 
-    - name: Install Composer Dependencies
+    - name: Run Laravel Migrations
       run: |
-        docker-compose exec app ls -l
+        docker exec -it laracamp-app php artisan migrate --force
       working-directory: ./app
