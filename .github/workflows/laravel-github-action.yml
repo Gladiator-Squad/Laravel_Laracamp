@@ -25,17 +25,18 @@ jobs:
         docker-compose build app
       working-directory: ./app
 
-    # - name: Build and start Docker Compose
-    #   run: |
-    #     docker-compose up -d
-    #   working-directory: ./app
+    - name: Build and start Docker Compose
+      run: |
+        docker-compose up -d
+      working-directory: ./app
 
-    # - name: Check if services are up
-    #   run: |
-    #     docker-compose ps
-    #   working-directory: ./app
+    - name: Check if services are up
+      run: |
+        docker-compose ps
+        docker-compose exec app ls -l
+      working-directory: ./app
 
-    # - name: Stop Docker Compose
-    #   run: |
-    #     docker-compose down
-    #   working-directory: ./app
+    - name: Stop Docker Compose
+      run: |
+        docker-compose down
+      working-directory: ./app
