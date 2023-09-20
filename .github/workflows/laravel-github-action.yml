@@ -26,7 +26,6 @@ jobs:
     - name: Build Image for Docker compose
       run: |
         docker-compose build app
-      working-directory: ./app
 
   deploy:
     runs-on: ubuntu-latest
@@ -35,7 +34,6 @@ jobs:
     - name: Build and start Docker Compose
       run: |
         docker-compose up -d
-      working-directory: ./app
 
   services:
     runs-on: ubuntu-latest
@@ -44,7 +42,6 @@ jobs:
     - name: Check if services are up
       run: |
         docker-compose ps
-      working-directory: ./app
   
   stop-docker:
     runs-on: ubuntu-latest
@@ -53,7 +50,6 @@ jobs:
     - name: Stop Docker Compose
       run: |
         docker-compose down
-      working-directory: ./app
   
   documentation:
     runs-on: ubuntu-latest
