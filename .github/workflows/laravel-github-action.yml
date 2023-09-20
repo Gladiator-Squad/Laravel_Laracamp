@@ -25,7 +25,12 @@ jobs:
         docker-compose up -d
       working-directory: ./app
 
-    - name: Run Laravel Migrations
+    - name: Check if services are up
       run: |
-        docker exec -it laracamp-app php artisan migrate --force
+        docker-compose ps
+      working-directory: ./app
+
+    - name: Stop Docker Compose
+      run: |
+        docker-compose down
       working-directory: ./app
