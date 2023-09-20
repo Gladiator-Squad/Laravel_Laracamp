@@ -48,7 +48,7 @@ pipeline {
 
     stage("Preparation") {
       parallel {
-        stage("Prepare Kubernetes") {
+        stage("Prepare Java") {
           agent {
             node {
               label "linux && java11"
@@ -59,7 +59,7 @@ pipeline {
             sleep(5)
           }
         }
-        stage("Prepare ArgoCD") {
+        stage("Prepare Linux") {
           agent {
             node {
               label "linux && java11"
@@ -105,6 +105,11 @@ pipeline {
       steps {
         sh 'docker compose exec app php artisan key:generate'
         sh 'docker compose exec app php artisan migrate:refresh --seed'
+      }
+    }
+    stage('Run PHP Artisan Test') {
+      steps {
+        sh 'docker compose exec app php artisan test'
       }
     }
     stage('Run tests against the container') {
