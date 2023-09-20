@@ -33,7 +33,6 @@ jobs:
     - name: Check if services are up
       run: |
         docker-compose ps
-        docker exec -it laracamp-app ls -l
       working-directory: ./app
 
     - name: Stop Docker Compose
