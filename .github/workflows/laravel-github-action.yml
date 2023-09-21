@@ -3,7 +3,7 @@ name: Docker Compose
 on:
   push:
     branches:
-      - main
+      - feature/setup-continuous-deployment-process
 
 jobs:
   build:
@@ -25,17 +25,30 @@ jobs:
         docker-compose build app
       working-directory: ./app
 
-    - name: Build and start Docker Compose
-      run: |
-        docker-compose up -d
-      working-directory: ./app
+  #   - name: Build and start Docker Compose
+  #     run: |
+  #       docker-compose up -d
+  #     working-directory: ./app
 
-    - name: Check if services are up
-      run: |
-        docker-compose ps
-      working-directory: ./app
+  #   - name: Build and push Docker image
+  #     run: |
+  #       docker-compose build app
+  #       docker login -u your-dockerhub-username -p your-dockerhub-password
+  #       docker tag your-image-name:latest your-dockerhub-username/your-image-name:latest
+  #       docker push your-dockerhub-username/your-image-name:latest
+  #     working-directory: ./app
 
-    - name: Stop Docker Compose
-      run: |
-        docker-compose down
-      working-directory: ./app
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+    
+  #   - name: SSH into IDCloudHost and update Docker containers
+  #     uses: appleboy/ssh-action@master
+  #     with:
+  #       host: ${{ secrets.IDCLOUDHOST_HOST }}
+  #       username: ${{ secrets.IDCLOUDHOST_USERNAME }}
+  #       key: ${{ secrets.IDCLOUDHOST_SSH_KEY }}
+  #       port: 22
+  #       script: |
+  #         docker pull your-dockerhub-username/your-image-name:latest
+  #         docker run -d --name your-container-name -p 80:80 your-dockerhub-username/your-image-name:latest
