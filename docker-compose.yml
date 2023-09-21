@@ -1,13 +1,7 @@
 version: "3.7"
 services:
   app:
-    build:
-      args:
-        user: laracamp
-        uid: 1000
-      context: ./
-      dockerfile: Dockerfile
-    image: laracamp
+    image: airist/laracamp
     container_name: laracamp-app
     restart: unless-stopped
     working_dir: /var/www/
