@@ -56,7 +56,7 @@ jobs:
 
   documentation:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: deploy
     steps:
       - name: Checkout code code
         uses: actions/checkout@v2
