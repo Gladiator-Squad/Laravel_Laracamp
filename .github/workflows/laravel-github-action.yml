@@ -60,7 +60,7 @@ jobs:
     needs: deploy
     steps:
       - name: Checkout code code
-        uses: actions/checkout@v2
+        uses: appleboy/ssh-action@master
       - name: Create pages directory
         run: mkdir docs
       - name: Convert markdown to HTML 
