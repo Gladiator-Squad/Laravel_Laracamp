@@ -50,6 +50,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         host: ${{ secrets.SSH_HOST }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
         script: |
           docker pull airist/laracamp:latest
           docker run -d --name laracamp-app -p 8000:80 airist/laracamp:latest
