@@ -3,7 +3,7 @@ name: Integrate Snyk to Github Action (SCA)
 on:
   push:
     branches:
-      - main
+      - stg
   workflow_dispatch:
 
 jobs:

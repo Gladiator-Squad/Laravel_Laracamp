@@ -3,7 +3,7 @@ name: Run Unit Test PHP to Github Action
 on:
   push:
     branches:
-      - main
+      - stg
   workflow_dispatch:
 
 jobs:
@@ -20,6 +20,3 @@ jobs:
 
     - name: Run Composer
       uses: php-actions/composer@v6
-
-    # - name: PHPUnit tests
-    #   uses: php-actions/phpunit@v3

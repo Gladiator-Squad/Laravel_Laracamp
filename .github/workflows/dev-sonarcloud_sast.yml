@@ -3,7 +3,7 @@ name: Integrate SonarCloud to Github Action (SAST)
 on:
   push:
     branches:
-      - main
+      - stg
   workflow_dispatch:
 
 jobs:
