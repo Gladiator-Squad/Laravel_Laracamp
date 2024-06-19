@@ -70,7 +70,7 @@ jobs:
         with:
           scan-type: 'fs'
           scanners: 'config'
-          scan-ref: './cns-website' 
+        #   scan-ref: './cns-website' 
           hide-progress: false
           format: 'sarif'
           output: 'trivy-results.sarif'
