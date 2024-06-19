@@ -7,12 +7,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  snyk-security-sca:
-    name: Snyk
+#   snyk-security-sca:
+#     name: Snyk
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@master
+#       - name: Run Snyk to check for vulnerabilities
+#         uses: snyk/actions/php@master
+#         env:
+#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  soos-sca-analysis:
+    name: SOOS SCA Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/php@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    - uses: actions/checkout@master
+    - name: Run SOOS - Scan for vulnerabilities
+      uses: soos-io/soos-sca-github-action@v2 # Get Latest Version from https://github.com/marketplace/actions/soos-core-sca
+      with:
+        project_name: "Laravel Laracamp"
+        client_id: ${{ secrets.SOOS_CLIENT_ID }}
+        api_key: ${{ secrets.SOOS_API_KEY }}
