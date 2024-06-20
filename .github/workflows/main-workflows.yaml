@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-deploy:
     uses: ./.github/workflows/ci-build-deploy.yml
-    with:
+    secrets:
       docker_image: 'docker.io/airist/laracamp:${{ github.sha }}'
       docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
       docker_token: ${{ secrets.DOCKERHUB_TOKEN }}
