@@ -8,7 +8,12 @@ on:
 
 jobs:
   build-and-deploy:
-    uses: ./.github/workflows/ci-build-deploy.yml
+    runs-on: ubuntu-latest
+    extends:
+      template: .github/workflows/templates/build-deploy-template.yml
 
-  run-tests:
-    uses: ./.github/workflows/ci-test.yml
+    extends:
+      template: .github/workflows/ci-test.yml
+
+  # run-tests:
+  #   uses: ./.github/workflows/ci-test.yml
