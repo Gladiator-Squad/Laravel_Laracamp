@@ -8,10 +8,8 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
-    extends:
-      template: .github/workflows/templates/build-deploy-template.yml
-
-
-  run-tests:
-    uses: ./.github/workflows/ci-test.yml
+    uses: ./.github/workflows/ci-build-deploy.yml
+    with:
+      docker_image: 'docker.io/airist/laracamp:${{ github.sha }}'
+    secrets:
+      inherit: true
