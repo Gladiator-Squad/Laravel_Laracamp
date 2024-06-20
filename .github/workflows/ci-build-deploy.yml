@@ -10,14 +10,10 @@ on:
 
     secrets:
       docker_username:
-        description: 'Docker Hub username'
         required: true
-        # type: string
 
       docker_token:
-        description: 'Docker Hub token'
         required: true
-        # type: string
 
 jobs:
   fs-scan:
