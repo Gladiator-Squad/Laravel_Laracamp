@@ -7,12 +7,5 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
-    uses: ./.github/workflows/ci-build-deploy.yml
-    with:
-      docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
-      docker_token: ${{ secrets.DOCKERHUB_TOKEN }}
-      docker_image: 'docker.io/airist/laracamp'
-
   run-tests:
     uses: ./.github/workflows/ci-test.yml
