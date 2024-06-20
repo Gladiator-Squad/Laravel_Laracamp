@@ -18,5 +18,5 @@ jobs:
     with:
       docker_image: 'docker.io/airist/laracamp:${{ github.sha }}'
     secrets:
-      docker_username: ${{ secrets.DOCKER_USERNAME }}
-      docker_token: ${{ secrets.DOCKER_TOKEN }} 
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN }} 
