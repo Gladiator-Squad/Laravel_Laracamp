@@ -12,8 +12,6 @@ jobs:
     extends:
       template: .github/workflows/templates/build-deploy-template.yml
 
-    extends:
-      template: .github/workflows/ci-test.yml
 
-  # run-tests:
-  #   uses: ./.github/workflows/ci-test.yml
+  run-tests:
+    uses: ./.github/workflows/ci-test.yml
