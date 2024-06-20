@@ -2,7 +2,7 @@ name: CI Build & Deploy
 
 on:
   workflow_call:
-    secrets:
+    inputs:
       docker_username:
         description: 'Docker Hub username'
         required: true
