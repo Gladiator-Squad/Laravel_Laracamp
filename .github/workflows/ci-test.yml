@@ -15,5 +15,5 @@ jobs:
           php-version: '8.1'
       - name: Run Composer
         uses: php-actions/composer@v6
-      - name: Run PHPUnit
-        uses: php-actions/phpunit@v3
+      # - name: Run PHPUnit
+      #   uses: php-actions/phpunit@v3

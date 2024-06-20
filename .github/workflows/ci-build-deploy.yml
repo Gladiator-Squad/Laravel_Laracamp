@@ -1,72 +1,74 @@
 name: CI Build & Deploy
+
 on:
   workflow_call:
+    inputs:
+      docker_username:
+        description: 'Docker Hub username'
+        required: true
+        type: string
+      docker_token:
+        description: 'Docker Hub token'
+        required: true
+        type: string
+      docker_image:
+        description: 'Docker image name'
+        required: true
+        type: string
 
 jobs:
   fs-scan:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
-      - 
-        name: Run Trivy vulnerability scanner in fs mode
+      - name: Run Trivy vulnerability scanner in fs mode
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
           scan-ref: '.'
           exit-code: '0'
           trivy-config: trivy.yaml
-          name: Set up QEMU
-          uses: docker/setup-qemu-action@v2
 
   container-scan:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
-      - 
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      -
-        name: Login to Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
+          username: ${{ inputs.docker_username }}
+          password: ${{ inputs.docker_token }}
+      - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: docker.io/airist/laracamp:${{ github.sha }}
-      - 
-        name: Run Trivy vulnerability scanner
+          tags: ${{ inputs.docker_image }}
+      - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/airist/laracamp:${{ github.sha }}'
+          image-ref: ${{ inputs.docker_image }}
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-  
+
   config-scan:
     runs-on: ubuntu-latest
-    steps:     
-      -
-        name: Checkout
+    steps:
+      - name: Checkout
         uses: actions/checkout@v3
-      - 
-        name: Run Trivy vulnerability scanner in IaC mode
+      - name: Run Trivy vulnerability scanner in IaC mode
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
           scanners: 'config'
-        #   scan-ref: './cns-website' 
           hide-progress: false
           format: 'sarif'
           output: 'trivy-results.sarif'
@@ -74,39 +76,7 @@ jobs:
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
           trivy-config: trivy.yaml
-      - 
-        name: Upload Trivy scan results to GitHub Security tab
+      - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
-
-#   build:
-#     runs-on: ubuntu-latest
-#     needs  : test
-
-#     steps:
-#     - name: Checkout repository
-#       uses: actions/checkout@v2
-
-#     - name: Set up Docker Buildx
-#       uses: docker/setup-buildx-action@v1
-    
-#     - name: Build Image for Docker compose
-#       run: |
-#         docker-compose build app
-#       working-directory: ./app
-
-#     - name: Build and start Docker Compose
-#       run: |
-#         docker-compose down && docker-compose up -d
-#       working-directory: ./app
-
-#     - name: Check if services are up
-#       run: |
-#         docker-compose ps
-#       working-directory: ./app
-
-#     - name: Stop Docker Compose
-#       run: |
-#         docker-compose down
-#       working-directory: ./app
