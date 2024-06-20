@@ -17,9 +17,7 @@ jobs:
     uses: ./.github/workflows/ci-build-deploy.yml
     with:
       docker_image: 'docker.io/airist/laracamp:${{ github.sha }}'
-    secrets:
-      docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
-      docker_token: ${{ secrets.DOCKERHUB_TOKEN }}
+    inherit: true
 
   run-tests:
     uses: ./.github/workflows/ci-test.yml
