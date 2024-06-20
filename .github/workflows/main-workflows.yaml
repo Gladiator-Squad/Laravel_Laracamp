@@ -3,7 +3,7 @@ name: Main CI Workflow
 on:
   push:
     branches:
-      - DEV-5_Setup-Pipeline-Github-Action-for-Laracamp-Project
+      - main
   workflow_dispatch:
 
 jobs:
