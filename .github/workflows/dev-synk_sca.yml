@@ -7,15 +7,6 @@ on:
   workflow_dispatch:
 
 jobs:
-#   snyk-security-sca:
-#     name: Snyk
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@master
-#       - name: Run Snyk to check for vulnerabilities
-#         uses: snyk/actions/php@master
-#         env:
-#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   soos-sca-analysis:
     name: SOOS SCA Scan
