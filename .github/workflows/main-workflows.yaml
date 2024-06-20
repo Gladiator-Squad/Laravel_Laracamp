@@ -14,3 +14,6 @@ jobs:
     secrets:
       docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
       docker_token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  run-tests:
+    uses: ./.github/workflows/ci-test.yml
