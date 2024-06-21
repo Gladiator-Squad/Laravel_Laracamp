@@ -16,18 +16,9 @@ on:
   workflow_dispatch:
 
 jobs:
-
   unit-test:
     uses: ./.github/workflows/ci-test.yml
-
-  build-and-deploy:
-    uses: ./.github/workflows/ci-build-deploy.yml
-    with:
-      docker_image: 'docker.io/airist/laracamp:${{ github.sha }}'
-    secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
-
+  
   sca-test:
     uses: ./.github/workflows/ci-soos-sca.yml
     secrets:
@@ -35,10 +26,21 @@ jobs:
       api_key: ${{ secrets.SOOS_API_KEY }}
 
   sast-test:
+    needs: sca-test
     uses: ./.github/workflows/ci-sonarcloud-sast.yml
     secrets:
       GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build-and-deploy:
+    needs: unit-test
+    uses: ./.github/workflows/ci-build-deploy.yml
+    with:
+      docker_image: 'docker.io/airist/laracamp:${{ github.sha }}'
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
+
 
 
   
