@@ -1,10 +1,13 @@
 name: Integrate Snyk to Github Action (SCA)
 
 on:
-  push:
-    branches:
-      - stg
-  workflow_dispatch:
+  workflow_call:
+    secrets:
+      client_id:
+        required: true
+      api_key:
+        required: true
+
 
 jobs:
 
@@ -17,5 +20,5 @@ jobs:
       uses: soos-io/soos-sca-github-action@v2 # Get Latest Version from https://github.com/marketplace/actions/soos-core-sca
       with:
         project_name: "Laravel Laracamp"
-        client_id: ${{ secrets.SOOS_CLIENT_ID }}
-        api_key: ${{ secrets.SOOS_API_KEY }}
+        client_id: ${{ secrets.client_id }}
+        api_key: ${{ secrets.api_key }}

@@ -58,6 +58,9 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          
+      - name: Check Docker Images 
+        run: docker images 
 
   config-scan:
     runs-on: ubuntu-latest
@@ -74,8 +77,9 @@ jobs:
           output: 'trivy-results.sarif'
           exit-code: '0'
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL,HIGH,MEDIUM'
           trivy-config: trivy.yaml
+
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
