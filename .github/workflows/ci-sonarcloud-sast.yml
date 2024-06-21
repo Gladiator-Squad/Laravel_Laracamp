@@ -3,11 +3,10 @@ name: Integrate SonarCloud to Github Action (SAST)
 on:
   workflow_call:
     secrets:
-      GITHUB_TOKEN:
+      GIT_HUB_TOKEN:
         required: true
       SONAR_TOKEN:
         required: true
-        
 
 jobs:
   sonarcloud:
