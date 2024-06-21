@@ -8,7 +8,7 @@ permissions:
   statuses: write
   actions: read
   pages: write
-  
+
 on:
   push:
     branches:
@@ -16,11 +16,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  do-it:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+
+  unit-test:
+    uses: ./.github/workflows/ci-test.yml
 
   build-and-deploy:
     uses: ./.github/workflows/ci-build-deploy.yml
@@ -29,3 +27,12 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
+
+  sca-test:
+    uses: ./.github/workflows/dev-soos-sca.yml
+    secrets:
+      client_id: ${{ secrets.SOOS_CLIENT_ID }}
+      api_key: ${{ secrets.SOOS_API_KEY }}
+
+
+  
