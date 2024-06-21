@@ -58,6 +58,9 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          
+      - name: Check Docker Images 
+        run: docker images 
 
   config-scan:
     runs-on: ubuntu-latest
