@@ -3,7 +3,7 @@ name: Main CI Workflow
 on:
   push:
     branches:
-      - main
+      - DEV-18_Implement-Generic-Pipeline-to-Setup-Generic-Pipeline-Github-Action
   workflow_dispatch:
 
 jobs:
@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      
+      - name: Check Credentials
+        uses: 
 
   build-and-deploy:
     uses: ./.github/workflows/ci-build-deploy.yml
