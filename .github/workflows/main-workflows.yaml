@@ -34,5 +34,11 @@ jobs:
       client_id: ${{ secrets.SOOS_CLIENT_ID }}
       api_key: ${{ secrets.SOOS_API_KEY }}
 
+  sast-test:
+    uses: ./.github/workflows/ci-sonarcloud-sast.yml
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
   
