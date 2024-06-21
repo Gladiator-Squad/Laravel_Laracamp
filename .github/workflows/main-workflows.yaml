@@ -12,9 +12,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: Check Credentials
-        uses: 
 
   build-and-deploy:
     uses: ./.github/workflows/ci-build-deploy.yml
