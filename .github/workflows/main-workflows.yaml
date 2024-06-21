@@ -12,7 +12,7 @@ permissions:
 on:
   push:
     branches:
-      - DEV-18_Implement-Generic-Pipeline-to-Setup-Generic-Pipeline-Github-Action
+      - main
   workflow_dispatch:
 
 jobs:
