@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  MYSQL_DATABASE: laracamp_db
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+stringData:
+  MYSQL_ROOT_PASSWORD: password
+  MYSQL_USER: laracamp_user
+  MYSQL_PASSWORD: laracamp_pw

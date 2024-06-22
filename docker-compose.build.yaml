@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  laravel:
+    image: airist/kubernetes-laracamp:v1
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - "8000:80"
+    environment:
+      APP_ENV: local
+
+    

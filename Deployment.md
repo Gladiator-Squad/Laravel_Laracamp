@@ -5,6 +5,7 @@
 3. Build App
 ```bash
 docker-compose build app
+sudo apt install php8.1 php8.1-cli php8.1-common php8.1-mbstring php8.1-xml php8.1-mysql php8.1-curl php8.1-gd
 ```
 4. Run Docker-compose
 ```bash
