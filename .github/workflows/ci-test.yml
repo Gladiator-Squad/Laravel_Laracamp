@@ -4,7 +4,35 @@ on:
   workflow_call:
 
 jobs:
-  test:
+  docker-compose-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Set up Docker Compose
+      run: |
+        docker-compose --version
+        sudo rm /usr/local/bin/docker-compose
+        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+    - name: Build Image for Docker compose
+      run: |
+        docker-compose build app
+      working-directory: ./app
+    - name: Build and start Docker Compose
+      run: |
+        docker-compose up -d
+      working-directory: ./app
+    - name: Check if services are up
+      run: |
+        docker-compose ps
+      working-directory: ./app
+    - name: Stop Docker Compose
+      run: |
+        docker-compose down
+      working-directory: ./app
+
+  laravel-test:
     runs-on: ubuntu-latest
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e

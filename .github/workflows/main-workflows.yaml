@@ -16,39 +16,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker-compose-test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Set up Docker Compose
-      run: |
-        docker-compose --version
-        sudo rm /usr/local/bin/docker-compose
-        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-    - name: Build Image for Docker compose
-      run: |
-        docker-compose build app
-      working-directory: ./app
-    - name: Build and start Docker Compose
-      run: |
-        docker-compose up -d
-      working-directory: ./app
-    - name: Check if services are up
-      run: |
-        docker-compose ps
-      working-directory: ./app
-    - name: Stop Docker Compose
-      run: |
-        docker-compose down
-      working-directory: ./app
 
   unit-test:
-    needs: docker-compose-test
     uses: ./.github/workflows/ci-test.yml
   
   sca-test:
+    needs: unit-test
     uses: ./.github/workflows/ci-soos-sca.yml
     secrets:
       client_id: ${{ secrets.SOOS_CLIENT_ID }}
@@ -62,7 +35,7 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build-and-deploy:
-    needs: unit-test
+    needs: sast-test
     uses: ./.github/workflows/ci-build-deploy.yml
     with:
       docker_image: 'docker.io/airist/laracamp:${{ github.sha }}'

@@ -1,5 +1,4 @@
 ARG PHP_VERSION=8.1-apache
-ARG NODE_VERSION=14.15-alpine3.13
 
 FROM php:${PHP_VERSION} as php_laravel
 # install dependencies for laravel 8
@@ -45,14 +44,10 @@ ENV APP_DEBUG=false
 ENV APP_URL=""
 ENV APP_ENV=production
 ENV DB_CONNECTION=mysql
-# ENV DB_HOST=localhost
 ENV DB_PORT=3306
 
 # copy source laravel
 COPY . .
-# COPY --from=laramix_build /var/www/php/public/css public/css
-# COPY --from=laramix_build /var/www/php/public/fonts public/fonts
-# COPY --from=laramix_build /var/www/php/public/js public/js
 
 # give full access
 RUN mkdir -p public/storage && \
