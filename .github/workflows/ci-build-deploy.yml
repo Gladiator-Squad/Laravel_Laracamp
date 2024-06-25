@@ -29,7 +29,7 @@ jobs:
           exit-code: '0'
           trivy-config: trivy.yaml
 
-  buiild-image:
+  build-image:
     needs: prepare-scan
     runs-on: ubuntu-latest
     steps:
