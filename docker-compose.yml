@@ -2,17 +2,14 @@ version: "3.7"
 services:
   app:
     build:
-      args:
-        user: laracamp
-        uid: 1001
       context: ./
       dockerfile: Dockerfile
     image: laracamp    
     container_name: laracamp-app
     restart: unless-stopped
-    working_dir: /var/www/
+    working_dir: /var/www/php
     volumes:
-      - ./:/var/www
+      - ./:/var/www/php
     networks:
       - laracamp
 

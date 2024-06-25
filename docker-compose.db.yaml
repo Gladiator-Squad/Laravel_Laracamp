@@ -7,9 +7,9 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=secretRootPasswd
-      - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_USER=${DB_USERNAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=laracamp_db
+      - MYSQL_USER=laracamp_user
+      - MYSQL_PASSWORD=laracamp_pw
     volumes:
       - mysql_data:/var/lib/mysql
 volumes:

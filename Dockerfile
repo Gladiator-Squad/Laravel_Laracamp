@@ -1,6 +1,6 @@
 ARG PHP_VERSION=8.1-apache
 
-FROM php:${PHP_VERSION} as php_laravel
+FROM php:${PHP_VERSION} AS php_laravel
 # install dependencies for laravel 8
 RUN apt-get update && apt-get install -y \
   curl \
@@ -38,19 +38,23 @@ COPY .docker/php-artisan-migrate-foreground .docker/php-artisan-migrate
 
 CMD [".docker/apache2-foreground"]
 
-FROM php_laravel as executeable
+WORKDIR /var/www/php
+
+FROM php_laravel AS executeable
 ENV APP_SOURCE /var/www/php
 ENV APP_DEBUG=false
 ENV APP_URL=""
 ENV APP_ENV=production
 ENV DB_CONNECTION=mysql
+# ENV DB_HOST=localhost
 ENV DB_PORT=3306
 
 # copy source laravel
 COPY . .
 
 # give full access
-RUN mkdir -p public/storage && \
+RUN php -r "file_exists('.env') || copy('.env.example', '.env');" && \
+    mkdir -p public/storage && \
     chmod -R 777 storage/* && \
     chmod -R 777 public/storage && \
     chmod -R 777 .docker/* && \
