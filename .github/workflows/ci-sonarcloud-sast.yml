@@ -9,7 +9,7 @@ on:
         required: true
 
 jobs:
-  sonarcloud:
+  sast-sonarcloud-analysis:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
