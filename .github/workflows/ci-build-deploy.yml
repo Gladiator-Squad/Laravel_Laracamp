@@ -30,6 +30,7 @@ jobs:
           trivy-config: trivy.yaml
 
   buiild-image:
+    needs: prepare-scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -92,7 +93,8 @@ jobs:
       - name: Check Docker Images 
         run: docker images 
 
-  config-scan:
+  trivy-scan:
+    needs: build-image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -39,6 +39,13 @@ COPY .docker/php-artisan-migrate-foreground .docker/php-artisan-migrate
 
 CMD [".docker/apache2-foreground"]
 
+FROM node:$NODE_VERSION as laramix_build
+
+WORKDIR /var/www/php
+COPY . .
+RUN npm install -q && \
+    npm run-script prod
+
 FROM php_laravel as executeable
 ENV APP_SOURCE /var/www/php
 ENV APP_DEBUG=false
