@@ -26,8 +26,8 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "nasrullah.pandud1@gmail.com"
+          git config --local user.name "Nasrullah Pandu Dewantara"
 
       - name: Parse version components
         id: parse_version
