@@ -16,13 +16,13 @@ on:
 #         description: 'Patch version number'
 #         required: true
 
-# jobs:
-#   tag_and_push:
-#     name: Tag and Push
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v2
+jobs:
+  tag_and_push:
+    name: Tag and Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
 #       - name: Set up Git
 #         run: |
