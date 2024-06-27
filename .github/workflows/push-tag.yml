@@ -1,40 +1,40 @@
 name: Tag and Push
 
 on:
-  push:
-    branches:
-      - test_push-tag
+  # push:
+  #   branches:
+  #     - test_push-tag
   workflow_dispatch:
-    inputs:
-      major:
-        description: 'Major version number'
-        required: true
-      minor:
-        description: 'Minor version number'
-        required: true
-      patch:
-        description: 'Patch version number'
-        required: true
+#     inputs:
+#       major:
+#         description: 'Major version number'
+#         required: true
+#       minor:
+#         description: 'Minor version number'
+#         required: true
+#       patch:
+#         description: 'Patch version number'
+#         required: true
 
-jobs:
-  tag_and_push:
-    name: Tag and Push
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+# jobs:
+#   tag_and_push:
+#     name: Tag and Push
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
 
-      - name: Set up Git
-        run: |
-          git config --local user.email "nasrullah.pandud1@gmail.com"
-          git config --local user.name "Nasrullah Pandu Dewantara"
+#       - name: Set up Git
+#         run: |
+#           git config --local user.email "nasrullah.pandud1@gmail.com"
+#           git config --local user.name "Nasrullah Pandu Dewantara"
 
-      - name: Parse version components
-        id: parse_version
-        run: |
-          echo "::set-output name=major::${{ github.event.inputs.major }}"
-          echo "::set-output name=minor::${{ github.event.inputs.minor }}"
-          echo "::set-output name=patch::${{ github.event.inputs.patch }}"
+#       - name: Parse version components
+#         id: parse_version
+#         run: |
+#           echo "::set-output name=major::${{ github.event.inputs.major }}"
+#           echo "::set-output name=minor::${{ github.event.inputs.minor }}"
+#           echo "::set-output name=patch::${{ github.event.inputs.patch }}"
 
       # - name: Create and push tag
       #   run: |
