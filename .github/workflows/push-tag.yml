@@ -1,6 +1,9 @@
 name: Tag and Push
 
 on:
+  push:
+    branches:
+      - test_push-tag
   workflow_dispatch:
     inputs:
       major:
