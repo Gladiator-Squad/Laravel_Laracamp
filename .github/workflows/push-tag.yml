@@ -1,20 +1,19 @@
-name: Tag and Push
+name: Push and tag
+
+permissions:
+  security-events: write
+  pull-requests: read
+  contents: write
+  id-token: write
+  statuses: write
+  actions: read
+  pages: write
 
 on:
-  # push:
-  #   branches:
-  #     - test_push-tag
+  push:
+    branches:
+      - test_push-tag
   workflow_dispatch:
-#     inputs:
-#       major:
-#         description: 'Major version number'
-#         required: true
-#       minor:
-#         description: 'Minor version number'
-#         required: true
-#       patch:
-#         description: 'Patch version number'
-#         required: true
 
 jobs:
   tag_and_push:
