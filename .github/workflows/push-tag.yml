@@ -36,12 +36,12 @@ jobs:
           echo "::set-output name=minor::${{ github.event.inputs.minor }}"
           echo "::set-output name=patch::${{ github.event.inputs.patch }}"
 
-      - name: Create and push tag
-        run: |
-          version=v${{ steps.parse_version.outputs.major }}.${{ steps.parse_version.outputs.minor }}.${{ steps.parse_version.outputs.patch }}
-          git tag $version
-          git push origin $version
+      # - name: Create and push tag
+      #   run: |
+      #     version=v${{ steps.parse_version.outputs.major }}.${{ steps.parse_version.outputs.minor }}.${{ steps.parse_version.outputs.patch }}
+      #     git tag $version
+      #     git push origin $version
 
-      - name: Show tag information
-        run: |
-          git show ${{ github.sha }}
+      # - name: Show tag information
+      #   run: |
+      #     git show ${{ github.sha }}
