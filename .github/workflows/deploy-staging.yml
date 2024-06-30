@@ -44,7 +44,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y python3-pip
           pip3 install yq
 
-      - name: Debug: List directories
+      - name: Debug List directories
         run: |
           ls -alh
           ls -alh central-manifest
