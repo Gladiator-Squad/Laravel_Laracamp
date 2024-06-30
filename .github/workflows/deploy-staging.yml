@@ -1,0 +1,80 @@
+name: Update Manifest and Deploy to Staging
+
+on:
+  workflow_call:
+    secrets:
+      GIT_HUB_TOKEN:
+        required: true
+
+      DOCKER_USERNAME:
+        required: true
+
+      DOCKER_PASSWORD:
+        required: true
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v3
+
+      # - name: get-images-id
+      #   id: image-id
+      #   run: |
+      #     echo ::set-output name=IMAGE_ID::$(docker images -q nomadd:${{ steps.get-version.outputs.VERSION }}-rc)
+          
+      - uses: actions/checkout@v3
+        name: changing the deployment of git repo
+        with:
+          repository: 'Gladiator-Squad/Central-Manifest'
+          token: ${{ secrets.GIT_HUB_TOKEN }}
+
+      - name: modify the image
+        run: |
+          git config user.email eairist@gmail.com
+          git config user.name Airist
+          pwd
+          cat laracamp_deployment/staging/laracamp.yaml
+          pwd
+          yq e -i '.spec.template.spec.containers[0].image="airist/laracamp:staging-${{ github.run_number }}"' laracamp.yaml
+          cat laracamp_deployment/staging/laracamp.yaml
+          git add .
+          git commit -m 'Done  by Github Actions   Job changemanifest: ${{ github.run_number }}'
+          git push origin main
+        env:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+          RUN_NUMBER: ${{ github.run_number }}          
+
+      # - name: Telegram Notification
+      #   if: ${{ failure() }}
+      #   uses: xinthink/action-telegram@v1.1
+      #   with:
+      #     botToken: ${{ secrets.TELE_BOT_TOKEN }}
+      #     chatId: ${{ secrets.TELE_CHAT_ID }}
+      #     jobStatus: ${{ job.status }}
+      #     skipSuccess: true
+
+  deploy-staging:
+    name: Deploy Staging Environtment
+    needs: update-manifest
+    runs-on: ubuntu-latest
+    environment:
+      name: Staging
+    steps:
+      - name: ArgoCD Deploy to Staging
+        run: |
+          argocd login --insecure  ${{ secrets.ARGOCD_SERVER }} --username  ${{ secrets.ARGOCD_USER }} --password  ${{ secrets.ARGOCD_PASS}}
+          argocd app create laracamp-stg --project laracamp-stg --repo https://github.com/Gladiator-Squad/Central-Manifest.git --revision staging --path ./laracamp_deployment/staging --dest-namespace laracamp-stg --dest-server https://kubernetes.default.svc --upsert
+          argocd --grpc-web app sync nomadd-staging --force
+          argocd --grpc-web app wait nomadd-staging --timeout 600
+
+      # - name: Telegram Notification
+      #   if: ${{ failure() }}
+      #   uses: xinthink/action-telegram@v1.1
+      #   with:
+      #     botToken: ${{ secrets.TELE_BOT_TOKEN }}
+      #     chatId: ${{ secrets.TELE_CHAT_ID }}
+      #     jobStatus: ${{ job.status }}
+      #     skipSuccess: true
