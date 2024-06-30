@@ -61,7 +61,6 @@ jobs:
   #     ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
   dast-test:
-    needs: check-curl
     uses: ./.github/workflows/dast-scan-website.yml
     secrets:
       GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
