@@ -9,12 +9,11 @@ on:
 jobs:
   zap_scan:
     runs-on: ubuntu-latest
-    name: Scan the webapplication
+    name: DAST Scanning Wesbite with Zaproxy
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: master
+        uses: actions/checkout@v3
+        
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.10.0
         with:
