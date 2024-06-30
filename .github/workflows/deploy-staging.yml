@@ -3,7 +3,19 @@ name: Update Manifest and Deploy to Staging
 on:
   workflow_call:
     secrets:
+      GIT_HUB_USERNAME:
+        required: true
+
       GIT_HUB_TOKEN:
+        required: true
+
+      ARGOCD_SERVER:
+        required: true
+
+      ARGOCD_USER:
+        required: true
+
+      ARGOCD_PASS:
         required: true
 
 jobs:
@@ -37,8 +49,8 @@ jobs:
           git commit -m 'Done  by Github Actions   Job changemanifest: ${{ github.run_number }}'
           git push origin main
         env:
-          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
-          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+          GIT_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_HUB_TOKEN }}
           RUN_NUMBER: ${{ github.run_number }}          
 
       # - name: Telegram Notification

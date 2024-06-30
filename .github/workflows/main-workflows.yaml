@@ -51,6 +51,7 @@ jobs:
 
   deploy-staging:
     # needs: approval-staging
+    needs: build-image-staging
     uses: ./.github/workflows/deploy-staging.yml
     secrets:
       GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
