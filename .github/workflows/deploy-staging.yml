@@ -38,11 +38,19 @@ jobs:
           token: ${{ secrets.GIT_HUB_TOKEN }}
           ref: main
           path: central-manifest
+
       - name: Install yq
         run: |
           sudo apt-get update && sudo apt-get install -y python3-pip
           pip3 install yq
-          
+
+      - name: Debug: List directories
+        run: |
+          ls -alh
+          ls -alh central-manifest
+          ls -alh central-manifest/laracamp_deployment
+          ls -alh central-manifest/laracamp_deployment/staging
+
       - name: modify the image
         run: |
           git config user.email eairist@gmail.com
