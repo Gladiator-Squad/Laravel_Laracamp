@@ -16,52 +16,46 @@ on:
   workflow_dispatch:
 
 jobs:
-  # unit-test:
-  #   uses: ./.github/workflows/ci-test.yml
+  unit-test:
+    uses: ./.github/workflows/ci-test.yml
   
-  # sca-test:
-  #   needs: unit-test
-  #   uses: ./.github/workflows/ci-soos-sca.yml
-  #   secrets:
-  #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
-  #     api_key: ${{ secrets.SOOS_API_KEY }}
+  sca-test:
+    needs: unit-test
+    uses: ./.github/workflows/ci-soos-sca.yml
+    secrets:
+      client_id: ${{ secrets.SOOS_CLIENT_ID }}
+      api_key: ${{ secrets.SOOS_API_KEY }}
 
-  # sast-test:
-  #   needs: sca-test
-  #   uses: ./.github/workflows/ci-sonarcloud-sast.yml
-  #   secrets:
-  #     GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
-  #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  # build-image-staging:
-  #   needs: sast-test
-  #   uses: ./.github/workflows/ci-build-deploy.yml
-  #   with:
-  #     docker_image: 'docker.io/airist/laracamp:staging-${{ github.run_number }}'
-  #   secrets:
-  #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
-
-  approval-staging:
-    # needs: build-image-staging
-    uses: ./.github/workflows/deploy-approval-staging.yml
+  sast-test:
+    needs: sca-test
+    uses: ./.github/workflows/ci-sonarcloud-sast.yml
     secrets:
       GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # deploy-staging:
-  #   # needs: approval-staging
-  #   needs: build-image-staging
-  #   uses: ./.github/workflows/deploy-staging.yml
-  #   secrets:
-  #     GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-  #     GIT_HUB_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
-  #     ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }} 
-  #     ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
-  #     ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
+  build-image-staging:
+    needs: sast-test
+    uses: ./.github/workflows/ci-build-deploy.yml
+    with:
+      docker_image: 'docker.io/airist/laracamp:staging-${{ github.run_number }}'
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
 
-  # dast-test:
-  #   uses: ./.github/workflows/dast-scan-website.yml
-  #   secrets:
-  #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
-  #     api_key: ${{ secrets.SOOS_API_KEY }}
+  deploy-staging:
+    # needs: approval-staging
+    needs: build-image-staging
+    uses: ./.github/workflows/deploy-staging.yml
+    secrets:
+      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+      GIT_HUB_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
+      ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }} 
+      ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
+      ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
+
+  dast-test:
+    uses: ./.github/workflows/dast-scan-website.yml
+    secrets:
+      client_id: ${{ secrets.SOOS_CLIENT_ID }}
+      api_key: ${{ secrets.SOOS_API_KEY }}
   

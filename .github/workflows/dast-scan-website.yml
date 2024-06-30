@@ -20,4 +20,4 @@ jobs:
           api_key: ${{ secrets.api_key }}
           project_name: "DAST-Laracamp Website"
           scan_mode: "baseline"
-          target_url: "https://btech.id"
+          target_url: "https://www.scorecardresearch.com/"
