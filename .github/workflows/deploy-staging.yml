@@ -36,7 +36,7 @@ jobs:
         with:
           repository: 'Gladiator-Squad/Central-Manifest'
           token: ${{ secrets.GIT_HUB_TOKEN }}
-          path: ./central-manifest
+          path: central-manifest
 
       - name: Install yq
         run: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: modify the image
         run: |
-          cd ./central-manifest
+          cd central-manifest/
           git config user.email eairist@gmail.com
           git config user.name Airist
           yq -i '.spec.containers[0].image = "airist/laracamp:staging-${{ github.run_number }}"' central-manifest/laracamp_deployment/staging/laracamp.yaml
