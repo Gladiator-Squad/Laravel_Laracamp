@@ -57,9 +57,9 @@ jobs:
           git config user.name Airist
           sed -i 's|\(image: airist/laracamp:staging-\)[^ ]*|\1${{ github.run_number }}|' laracamp_deployment/staging/laracamp.yaml
           cat laracamp_deployment/staging/laracamp.yaml
-          # git add .
-          # git commit -m 'Done  by Github Actions   Job changemanifest: ${{ github.run_number }}'
-          # git push origin main
+          git add .
+          git commit -m 'Done  by Github Actions   Job changemanifest: ${{ github.run_number }}'
+          git push origin main
         env:
           GIT_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_HUB_TOKEN }}
