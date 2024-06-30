@@ -37,7 +37,7 @@ jobs:
     needs: sast-test
     uses: ./.github/workflows/ci-build-deploy.yml
     with:
-      docker_image: 'docker.io/airist/laracamp:staging-${{ github.run_number }}'
+      # docker_image: 'docker.io/airist/laracamp:staging-${{ github.run_number }}'
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
 
