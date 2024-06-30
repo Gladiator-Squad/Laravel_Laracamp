@@ -42,22 +42,22 @@ jobs:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
 
-  approval-staging:
-    needs: build-image-staging
-    uses: trstringer/manual-approval@v1
-    with:
-      secret: ${{ secrets.GIT_HUB_TOKEN }} 
-      approvers: wapol4
+  # approval-staging:
+  #   needs: build-image-staging
+  #   uses: trstringer/manual-approval@v1
+  #   with:
+  #     secret: ${{ secrets.GIT_HUB_TOKEN }} 
+  #     approvers: wapol4
 
-  # deploy-staging:
-  #   needs: approval-staging
-  #   uses: ./.github/workflows/deploy-staging.yml
-  #   secrets:
-  #     GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-  #     GIT_HUB_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
-  #     ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }} 
-  #     ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
-  #     ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
+  deploy-staging:
+    # needs: approval-staging
+    uses: ./.github/workflows/deploy-staging.yml
+    secrets:
+      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+      GIT_HUB_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
+      ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }} 
+      ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
+      ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
   # check-curl:
   #   needs: build-image-staging
