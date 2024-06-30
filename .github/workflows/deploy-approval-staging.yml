@@ -3,26 +3,16 @@ name: Update Manifest and Deploy to Staging
 on:
   workflow_call:
     secrets:
-      GIT_HUB_USERNAME:
-        required: true
-
       GIT_HUB_TOKEN:
-        required: true
-
-      ARGOCD_SERVER:
-        required: true
-
-      ARGOCD_USER:
-        required: true
-
-      ARGOCD_PASS:
         required: true
 
 jobs:
   approval-staging:
     runs-on: ubuntu-latest
-    needs: build-image-staging
-    uses: trstringer/manual-approval@v1
-    with:
-      secret: ${{ secrets.GIT_HUB_TOKEN }} 
-      approvers: wapol4
+    name: Approval Staging
+    steps:
+      - name: Checkout
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GIT_HUB_TOKEN }}
+          approvers: wapol4

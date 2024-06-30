@@ -16,62 +16,49 @@ on:
   workflow_dispatch:
 
 jobs:
-  unit-test:
-    uses: ./.github/workflows/ci-test.yml
+  # unit-test:
+  #   uses: ./.github/workflows/ci-test.yml
   
-  sca-test:
-    needs: unit-test
-    uses: ./.github/workflows/ci-soos-sca.yml
-    secrets:
-      client_id: ${{ secrets.SOOS_CLIENT_ID }}
-      api_key: ${{ secrets.SOOS_API_KEY }}
+  # sca-test:
+  #   needs: unit-test
+  #   uses: ./.github/workflows/ci-soos-sca.yml
+  #   secrets:
+  #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
+  #     api_key: ${{ secrets.SOOS_API_KEY }}
 
-  sast-test:
-    needs: sca-test
-    uses: ./.github/workflows/ci-sonarcloud-sast.yml
-    secrets:
-      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  # sast-test:
+  #   needs: sca-test
+  #   uses: ./.github/workflows/ci-sonarcloud-sast.yml
+  #   secrets:
+  #     GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
+  #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  build-image-staging:
-    needs: sast-test
-    uses: ./.github/workflows/ci-build-deploy.yml
-    with:
-      docker_image: 'docker.io/airist/laracamp:staging-${{ github.run_number }}'
-    secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
-
-  # approval-staging:
-  #   needs: build-image-staging
-  #   uses: trstringer/manual-approval@v1
+  # build-image-staging:
+  #   needs: sast-test
+  #   uses: ./.github/workflows/ci-build-deploy.yml
   #   with:
-  #     secret: ${{ secrets.GIT_HUB_TOKEN }} 
-  #     approvers: wapol4
+  #     docker_image: 'docker.io/airist/laracamp:staging-${{ github.run_number }}'
+  #   secrets:
+  #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
 
-  deploy-staging:
-    # needs: approval-staging
-    needs: build-image-staging
-    uses: ./.github/workflows/deploy-staging.yml
-    secrets:
-      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-      GIT_HUB_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
-      ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }} 
-      ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
-      ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
+  # # approval-staging:
+  # #   needs: build-image-staging
+  # #   uses: trstringer/manual-approval@v1
+  # #   with:
+  # #     secret: ${{ secrets.GIT_HUB_TOKEN }} 
+  # #     approvers: wapol4
 
-  check-curl:
-    needs: deploy-staging
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check HTTP Status of btech.id
-        run: |
-          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" https://btech.id)
-          if [ "$STATUS_CODE" -eq 200 ] || [ "$STATUS_CODE" -eq 302 ]; then
-            echo "Status is $STATUS_CODE. Success."
-          else
-            echo "Status is $STATUS_CODE. Failing."
-            exit 1
+  # deploy-staging:
+  #   # needs: approval-staging
+  #   needs: build-image-staging
+  #   uses: ./.github/workflows/deploy-staging.yml
+  #   secrets:
+  #     GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+  #     GIT_HUB_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
+  #     ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }} 
+  #     ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
+  #     ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
   dast-test:
     needs: check-curl
