@@ -37,16 +37,17 @@ jobs:
     needs: sast-test
     uses: ./.github/workflows/ci-build-deploy.yml
     with:
-      # docker_image: 'docker.io/airist/laracamp:staging-${{ github.run_number }}'
+      docker_image: 'docker.io/airist/laracamp:staging-${{ github.run_number }}'
+    secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
 
-  # approval-staging:
-  #   needs: build-image-staging
-  #   uses: trstringer/manual-approval@v1
-  #   with:
-  #     secret: ${{ secrets.GIT_HUB_TOKEN }} 
-  #     approvers: wapol4
+  approval-staging:
+    needs: build-image-staging
+    uses: trstringer/manual-approval@v1
+    with:
+      secret: ${{ secrets.GIT_HUB_TOKEN }} 
+      approvers: wapol4
 
   # deploy-staging:
   #   needs: approval-staging
