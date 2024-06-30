@@ -60,22 +60,22 @@ jobs:
       ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
       ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
-  # check-curl:
-  #   needs: build-image-staging
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Check HTTP Status of btech.id
-  #       run: |
-  #         STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" https://btech.id)
-  #         if [ "$STATUS_CODE" -eq 200 ] || [ "$STATUS_CODE" -eq 302 ]; then
-  #           echo "Status is $STATUS_CODE. Success."
-  #         else
-  #           echo "Status is $STATUS_CODE. Failing."
-  #           exit 1
+  check-curl:
+    needs: build-image-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check HTTP Status of btech.id
+        run: |
+          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" https://btech.id)
+          if [ "$STATUS_CODE" -eq 200 ] || [ "$STATUS_CODE" -eq 302 ]; then
+            echo "Status is $STATUS_CODE. Success."
+          else
+            echo "Status is $STATUS_CODE. Failing."
+            exit 1
 
-  # dast-test:
-  #   needs: check-curl
-  #   uses: ./.github/workflows/dast-scan-website.yml
-  #   secrets:
-  #     GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+  dast-test:
+    needs: check-curl
+    uses: ./.github/workflows/dast-scan-website.yml
+    secrets:
+      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
   
