@@ -6,12 +6,6 @@ on:
       GIT_HUB_TOKEN:
         required: true
 
-      DOCKER_USERNAME:
-        required: true
-
-      DOCKER_PASSWORD:
-        required: true
-
 jobs:
   update-manifest:
     runs-on: ubuntu-latest
