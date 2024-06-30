@@ -61,7 +61,7 @@ jobs:
       ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
   check-curl:
-    needs: build-image-staging
+    needs: deploy-staging
     runs-on: ubuntu-latest
     steps:
       - name: Check HTTP Status of btech.id
