@@ -63,5 +63,6 @@ jobs:
   dast-test:
     uses: ./.github/workflows/dast-scan-website.yml
     secrets:
-      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+      client_id: ${{ secrets.SOOS_CLIENT_ID }}
+      api_key: ${{ secrets.SOOS_API_KEY }}
   
