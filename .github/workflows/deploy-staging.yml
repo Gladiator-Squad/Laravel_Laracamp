@@ -36,15 +36,18 @@ jobs:
         with:
           repository: 'Gladiator-Squad/Central-Manifest'
           token: ${{ secrets.GIT_HUB_TOKEN }}
-          path: laracamp_deployment/staging
-
+          ref: main
+          path: central-manifest
+      - name: Install yq
+        run: |
+          sudo apt-get update && sudo apt-get install -y python3-pip
+          pip3 install yq
+          
       - name: modify the image
         run: |
           git config user.email eairist@gmail.com
           git config user.name Airist
-          pwd
-          cat laracamp.yaml
-          pwd
+          cd central-manifest/laracamp_deployment/staging/
           yq e -i '.spec.template.spec.containers[0].image="airist/laracamp:staging-${{ github.run_number }}"' laracamp_deployment/staging/laracamp.yaml
           cat laracamp.yaml
           git add .
