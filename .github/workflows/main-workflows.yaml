@@ -43,7 +43,6 @@ jobs:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
 
   deploy-staging:
-    # needs: approval-staging
     needs: build-image-staging
     uses: ./.github/workflows/deploy-staging.yml
     secrets:
@@ -54,6 +53,7 @@ jobs:
       ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
   dast-test:
+    needs: deploy-staging
     uses: ./.github/workflows/dast-scan-website.yml
     secrets:
       client_id: ${{ secrets.SOOS_CLIENT_ID }}
