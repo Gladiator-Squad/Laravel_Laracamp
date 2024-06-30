@@ -55,11 +55,10 @@ jobs:
         run: |
           git config user.email eairist@gmail.com
           git config user.name Airist
-          cd central-manifest/laracamp_deployment/staging/
-          yq e -i '.spec.template.spec.containers[0].image="airist/laracamp:staging-${{ github.run_number }}"' laracamp_deployment/staging/laracamp.yaml
-          cat laracamp.yaml
-          git add .
-          git commit -m 'Done  by Github Actions   Job changemanifest: ${{ github.run_number }}'
+          yq -i -y '.spec.template.spec.containers[0].image = "airist/laracamp:staging-${{ github.run_number }}"' central-manifest/laracamp_deployment/staging/laracamp.yaml
+          cat central-manifest/laracamp_deployment/staging/laracamp.yaml
+          git add central-manifest/laracamp_deployment/staging/laracamp.yaml
+          git commit -m "Updated by GitHub Actions Job changemanifest: ${{ github.run_number }}"
           git push origin main
         env:
           GIT_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
