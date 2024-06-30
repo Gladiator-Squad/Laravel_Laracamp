@@ -45,7 +45,7 @@ jobs:
           cd laracamp_deployment/staging/
           cat laracamp.yaml
           pwd
-          yq e -i '.spec.template.spec.containers[0].image="airist/laracamp:staging-${{ github.run_number }}"' laracamp.yaml
+          yq e -i '.spec.template.spec.containers[0].image="airist/laracamp:staging-${{ github.run_number }}"' laracamp_deployment/staging/laracamp.yaml
           cat laracamp_deployment/staging/laracamp.yaml
           git add .
           git commit -m 'Done  by Github Actions   Job changemanifest: ${{ github.run_number }}'
