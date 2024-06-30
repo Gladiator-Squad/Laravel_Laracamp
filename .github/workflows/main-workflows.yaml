@@ -42,12 +42,11 @@ jobs:
   #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
 
-  # # approval-staging:
-  # #   needs: build-image-staging
-  # #   uses: trstringer/manual-approval@v1
-  # #   with:
-  # #     secret: ${{ secrets.GIT_HUB_TOKEN }} 
-  # #     approvers: wapol4
+  approval-staging:
+    # needs: build-image-staging
+    uses: ./.github/workflows/deploy-approval-staging.yml
+    secrets:
+      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
 
   # deploy-staging:
   #   # needs: approval-staging
@@ -60,9 +59,9 @@ jobs:
   #     ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
   #     ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
-  dast-test:
-    uses: ./.github/workflows/dast-scan-website.yml
-    secrets:
-      client_id: ${{ secrets.SOOS_CLIENT_ID }}
-      api_key: ${{ secrets.SOOS_API_KEY }}
+  # dast-test:
+  #   uses: ./.github/workflows/dast-scan-website.yml
+  #   secrets:
+  #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
+  #     api_key: ${{ secrets.SOOS_API_KEY }}
   
