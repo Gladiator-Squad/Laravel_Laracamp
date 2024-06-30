@@ -42,7 +42,8 @@ jobs:
           git config user.email eairist@gmail.com
           git config user.name Airist
           pwd
-          cat laracamp_deployment/staging/laracamp.yaml
+          cd laracamp_deployment/staging/
+          cat laracamp.yaml
           pwd
           yq e -i '.spec.template.spec.containers[0].image="airist/laracamp:staging-${{ github.run_number }}"' laracamp.yaml
           cat laracamp_deployment/staging/laracamp.yaml
