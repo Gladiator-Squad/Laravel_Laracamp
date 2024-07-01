@@ -59,18 +59,14 @@ jobs:
   #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
   #     api_key: ${{ secrets.SOOS_API_KEY }}
   
-  notify-on-release:
+  notify-telegram:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Telegram Notification on New Release
-        uses: cbrgm/telegram-github-action@v1
+      - name: Telegram Notification
+        if: ${{ failure() }}
+        uses: xinthink/action-telegram@v1.1
         with:
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          message: |
-            🚀 New Release Published!
-            Release Name: ${{ github.event.release.name }}
-            Tag: ${{ github.event.release.tag_name }}
-            Actor: ${{ github.actor }}
-            Repository: ${{ github.repository }}
-            Check it out: ${{ github.event.release.html_url }}j
+          botToken: ${{ secrets.TELEGRAM_TOKEN }}
+          chatId: ${{ secrets.TELEGRAM_CHAT_ID }}
+          jobStatus: ${{ job.status }}
+          skipSuccess: true
