@@ -9,7 +9,6 @@ on:
         required: true
 
 jobs:
-
   soos-sca-analysis:
     name: SOOS SCA Scan
     runs-on: ubuntu-latest
