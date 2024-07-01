@@ -62,21 +62,6 @@ jobs:
   notifyTelegram:
     runs-on: ubuntu-latest
     steps:
-    - name: send custom message
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_CHAT_ID }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: |
-          🚀 **CI/CD Pipeline Notification** 🚀
-          
-          **Event**: ${{ github.event_name }}
-          **Workflow**: *${{ github.workflow }}*
-          **Branch**: *${{ github.ref_name }}*
-          **Status**: *Success* ✅
-
-          **More info**: [GitHub Actions Run](${{ github.run_url }})
-
       - name: Notify Failure
         if: failure()
         uses: appleboy/telegram-action@master
