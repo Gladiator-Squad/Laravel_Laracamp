@@ -68,9 +68,13 @@ jobs:
       client_id: ${{ secrets.SOOS_CLIENT_ID }}
       api_key: ${{ secrets.SOOS_API_KEY }}
 
+  unit-test-prod:
+    if: github.event_name == 'release'
+    uses: ./.github/workflows/ci-test.yml
+
   build-image-production:
     if: github.event_name == 'release'
-    needs: unit-test
+    needs: unit-test-prod
     uses: ./.github/workflows/ci-build-deploy.yml
     with:
       docker_image: 'docker.io/airist/laracamp:release-${{ github.event.release.tag_name }}'
