@@ -52,21 +52,9 @@ jobs:
   #     ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
   #     ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
-  # dast-test:
-  #   needs: deploy-staging
-  #   uses: ./.github/workflows/dast-scan-website.yml
-  #   secrets:
-  #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
-  #     api_key: ${{ secrets.SOOS_API_KEY }}
-  
-  notify-telegram:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Telegram Notification
-        if: ${{ failure() }}
-        uses: xinthink/action-telegram@v1.1
-        with:
-          botToken: ${{ secrets.TELEGRAM_TOKEN }}
-          chatId: ${{ secrets.TELEGRAM_CHAT_ID }}
-          jobStatus: ${{ job.status }}
-          skipSuccess: true
+  dast-test:
+    needs: deploy-staging
+    uses: ./.github/workflows/dast-scan-website.yml
+    secrets:
+      client_id: ${{ secrets.SOOS_CLIENT_ID }}
+      api_key: ${{ secrets.SOOS_API_KEY }}
