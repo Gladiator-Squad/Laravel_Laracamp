@@ -73,4 +73,3 @@ jobs:
             \nTotal Time : *${{ steps.build.outputs.duration }}*
             \nActor: ${{ github.actor }}
             \nRepository: ${{ github.repository }}
-            \n\n*More info* at : ${{ github.run_url }}"
