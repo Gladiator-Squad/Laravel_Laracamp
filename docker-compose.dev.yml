@@ -10,30 +10,38 @@ services:
   #   networks:
   #     - laracamp
   app:
-    image: airist/kubernetes-laracamp:v1
+    image: airist/kubernetes-laracamp:v3
     build:
       dockerfile: Dockerfile
       context: ./
     ports:
       - "8000:80"
     environment:
-      APP_ENV: local
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - LOG_LEVEL=error
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     networks:
       - laracamp
 
-  # db:
-  #   image: mysql:5.7
-  #   ports:
-  #     - "3306:3306"
-  #   environment:
-  #     MYSQL_DATABASE: ${DB_DATABASE}
-  #     MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-  #     MYSQL_PASSWORD: ${DB_PASSWORD}
-  #     MYSQL_USER: ${DB_USERNAME}
-  #     SERVICE_TAGS: dev
-  #     SERVICE_NAME: mysql
-  #   networks:
-  #     - laracamp
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laracamp
 
   # db:
   #   image: mysql:8.0

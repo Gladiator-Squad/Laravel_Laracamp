@@ -50,9 +50,6 @@ ENV DB_PORT=3306
 
 # copy source laravel
 COPY . .
-# COPY --from=laramix_build /var/www/php/public/css public/css
-# COPY --from=laramix_build /var/www/php/public/fonts public/fonts
-# COPY --from=laramix_build /var/www/php/public/js public/js
 
 # give full access
 RUN php -r "file_exists('.env') || copy('.env.example', '.env');" && \

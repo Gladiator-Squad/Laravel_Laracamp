@@ -74,7 +74,7 @@ RUN composer install --no-interaction --optimize-autoloader --no-dev && \
     php artisan package:discover --ansi && \
     php artisan key:generate --ansi --force && \
     php artisan optimize
-
+    
 VOLUME ${APP_SOURCE}/storage
 # expose port default 80
 EXPOSE 80/tcp
