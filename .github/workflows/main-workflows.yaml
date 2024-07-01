@@ -69,26 +69,51 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set Variables
+        id: vars
+        run: |
+          echo "BRANCH_NAME=$(echo ${{ github.ref_name }} | sed 's/refs\/heads\///')" >> $GITHUB_ENV
+          echo "JOB_NAME=${{ github.workflow }}" >> $GITHUB_ENV
+          echo "RUN_URL=${{ github.run_url }}" >> $GITHUB_ENV
+
       - name: Notify Success
         if: success()
         run: |
-          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
-            -d chat_id=$TELEGRAM_CHATID \
-            -d parse_mode=markdown \
-            -d text='Dear team : \nCICD Pipeline *${{ github.workflow }}* \nBranch : *${{ github.ref_name }}* \nStatus job : *Success* \nTotal Time : *${{ steps.build.outputs.duration }}* \n\n*More info* at : ${{ github.run_url }}'
+          MESSAGE=$(cat <<EOF
+Dear team :
+CICD Pipeline *${{ env.JOB_NAME }}*
+Branch : *${{ env.BRANCH_NAME }}*
+Status job : *Success*
+Total Time : *N/A*
+More info at : ${{ env.RUN_URL }}
+EOF
+          )
+          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$TELEGRAM_CHATID -d parse_mode=markdown -d text="$MESSAGE"
 
       - name: Notify Failure
         if: failure()
         run: |
-          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
-            -d chat_id=$TELEGRAM_CHATID \
-            -d parse_mode=markdown \
-            -d text='Dear team : \nCICD Pipeline *${{ github.workflow }}* \nBranch : *${{ github.ref_name }}* \nStatus job : *Failed* \nTotal Time : *${{ steps.build.outputs.duration }}* \n\n*More info* at : ${{ github.run_url }}'
+          MESSAGE=$(cat <<EOF
+Dear team :
+CICD Pipeline *${{ env.JOB_NAME }}*
+Branch : *${{ env.BRANCH_NAME }}*
+Status job : *Failed*
+Total Time : *N/A*
+More info at : ${{ env.RUN_URL }}
+EOF
+          )
+          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$TELEGRAM_CHATID -d parse_mode=markdown -d text="$MESSAGE"
 
       - name: Notify Cancelled
         if: cancelled()
         run: |
-          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
-            -d chat_id=$TELEGRAM_CHATID \
-            -d parse_mode=markdown \
-            -d text='Dear team : \nCICD Pipeline *${{ github.workflow }}* \nBranch : *${{ github.ref_name }}* \nStatus job : *Aborted* \nTotal Time : *${{ steps.build.outputs.duration }}* \n\n*More info* at : ${{ github.run_url }}'
+          MESSAGE=$(cat <<EOF
+Dear team :
+CICD Pipeline *${{ env.JOB_NAME }}*
+Branch : *${{ env.BRANCH_NAME }}*
+Status job : *Aborted*
+Total Time : *N/A*
+More info at : ${{ env.RUN_URL }}
+EOF
+          )
+          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$TELEGRAM_CHATID -d parse_mode=markdown -d text="$MESSAGE"
