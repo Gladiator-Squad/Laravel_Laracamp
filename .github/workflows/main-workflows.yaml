@@ -61,15 +61,35 @@ jobs:
   
   notify-on-telegram:
     runs-on: ubuntu-latest
+    env:
+      BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_CHATID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
     steps:
-      - name: Send Telegram Notification on New Release
-        uses: cbrgm/telegram-github-action@v1
-        with:
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          message: |
-            Dear team : \nCICD Pipeline *${{ github.workflow }}*
-            \nBranch : *${{ github.ref_name }}*
-            \nTotal Time : *${{ steps.build.outputs.duration }}*
-            \nActor: ${{ github.actor }}
-            \nRepository: ${{ github.repository }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Add your build steps here
+      - name: Notify Success
+        if: success()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
+            -d chat_id=$TELEGRAM_CHATID \
+            -d parse_mode=markdown \
+            -d text="Dear team : \nCICD Pipeline *${{ github.workflow }}* \nBranch : *${{ github.ref_name }}* \nStatus job : *Success* \nTotal Time : *${{ steps.build.outputs.duration }}* \n\n*More info* at : ${{ github.run_url }}"
+
+      - name: Notify Failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
+            -d chat_id=$TELEGRAM_CHATID \
+            -d parse_mode=markdown \
+            -d text="Dear team : \nCICD Pipeline *${{ github.workflow }}* \nBranch : *${{ github.ref_name }}* \nStatus job : *Failed* \nTotal Time : *${{ steps.build.outputs.duration }}* \n\n*More info* at : ${{ github.run_url }}"
+
+      - name: Notify Cancelled
+        if: cancelled()
+        run: |
+          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
+            -d chat_id=$TELEGRAM_CHATID \
+            -d parse_mode=markdown \
+            -d text="Dear team : \nCICD Pipeline *${{ github.workflow }}* \nBranch : *${{ github.ref_name }}* \nStatus job : *Aborted* \nTotal Time : *${{ steps.build.outputs.duration }}* \n\n*More info* at : ${{ github.run_url }}"
