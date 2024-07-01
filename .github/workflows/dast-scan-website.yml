@@ -2,6 +2,12 @@ name: DAST Scanning Wesbite with Zaproxy
 
 on:
   workflow_call:
+    inputs:
+      website:
+        description: 'Website Production'
+        required: true
+        type: string
+
     secrets:
       client_id:
         required: true
@@ -20,4 +26,4 @@ jobs:
           api_key: ${{ secrets.api_key }}
           project_name: "DAST-Laracamp Website"
           scan_mode: "baseline"
-          target_url: "https://www.scorecardresearch.com/"
+          target_url: ${{ inputs.website }}

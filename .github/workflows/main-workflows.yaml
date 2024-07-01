@@ -12,11 +12,12 @@ permissions:
 on:
   push:
     branches:
-      - stg
+      - main
   workflow_dispatch:
 
 jobs:
   unit-test:
+    if: github.event_name == 'release' || github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/ci-test.yml
   
   sca-test:
@@ -54,9 +55,51 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
-  dast-test:
+  dast-website-staging:
     needs: deploy-staging
     uses: ./.github/workflows/dast-scan-website.yml
+    with:
+      website: 'https://www.scorecardresearch.com/'
+    secrets:
+      client_id: ${{ secrets.SOOS_CLIENT_ID }}
+      api_key: ${{ secrets.SOOS_API_KEY }}
+
+  build-image-production:
+    if: github.event_name == 'release'
+    needs: unit-test
+    uses: ./.github/workflows/ci-build-deploy.yml
+    with:
+      docker_image: 'docker.io/airist/laracamp:release-${{ github.event.release.tag_name }}'
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  approval-deploy-prod:
+    if: github.event_name == 'release'
+    name: Create Pull Request to Production
+    needs: build-image-production
+    uses: ./.github/workflows/deploy-approval-production.yml
+    secrets:
+      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
+
+  deploy-production:
+    if: github.event_name == 'release'
+    needs: approval-deploy-prod
+    uses: ./.github/workflows/deploy-production.yml
+    secrets:
+      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+      GIT_HUB_USERNAME: ${{ secrets.GIT_HUB_USERNAME }}
+      ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }} 
+      ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
+      ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+
+  dast-website-production:
+    needs: deploy-production
+    uses: ./.github/workflows/dast-scan-website.yml
+    with:
+      website: 'https://www.scorecardresearch.com/'
     secrets:
       client_id: ${{ secrets.SOOS_CLIENT_ID }}
       api_key: ${{ secrets.SOOS_API_KEY }}
