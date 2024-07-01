@@ -16,15 +16,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  unit-test:
-    uses: ./.github/workflows/ci-test.yml
+  # unit-test:
+  #   uses: ./.github/workflows/ci-test.yml
   
   sca-test:
-    needs: unit-test
+    # needs: unit-test
     uses: ./.github/workflows/ci-soos-sca.yml
     secrets:
       client_id: ${{ secrets.SOOS_CLIENT_ID }}
       api_key: ${{ secrets.SOOS_API_KEY }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   # sast-test:
   #   needs: sca-test

@@ -7,6 +7,10 @@ on:
         required: true
       api_key:
         required: true
+      TELEGRAM_CHAT_ID:
+        required: true
+      TELEGRAM_TOKEN:
+        required: true
 
 
 jobs:
@@ -23,7 +27,7 @@ jobs:
         client_id: ${{ secrets.client_id }}
         api_key: ${{ secrets.api_key }}
 
-    - name: Success Failure
+    - name: Success Notification
       if: success()
       uses: appleboy/telegram-action@master
       with:
@@ -39,7 +43,7 @@ jobs:
 
           **More info**: [GitHub Actions Run](${{ github.run_url }})
 
-    - name: Notify Failure
+    - name: Failure Notification
       if: failure()
       uses: appleboy/telegram-action@master
       with:
