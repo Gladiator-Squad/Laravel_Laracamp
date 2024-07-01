@@ -23,6 +23,22 @@ jobs:
         client_id: ${{ secrets.client_id }}
         api_key: ${{ secrets.api_key }}
 
+    - name: Success Failure
+      if: success()
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          🚀 **CI/CD Pipeline Notification** 🚀
+          
+          **Event**: ${{ github.event_name }}
+          **Workflow**: *${{ github.workflow }}*
+          **Branch**: *${{ github.ref_name }}*
+          **Status**: *Success* ✅
+
+          **More info**: [GitHub Actions Run](${{ github.run_url }})
+
     - name: Notify Failure
       if: failure()
       uses: appleboy/telegram-action@master
