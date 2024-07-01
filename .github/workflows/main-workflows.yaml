@@ -97,6 +97,7 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   dast-website-production:
+    if: github.event_name == 'release'
     needs: deploy-production
     uses: ./.github/workflows/dast-scan-website.yml
     with:
