@@ -1,4 +1,4 @@
-name: CI Build & Deploy
+name: Builde Image Docker (CI)
 
 on:
   workflow_call:
@@ -17,10 +17,12 @@ on:
 
 jobs:
   prepare-scan:
+    name: Prepare Trivy Scanner
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Run Trivy vulnerability scanner in fs mode
         uses: aquasecurity/trivy-action@master
         with:
@@ -30,19 +32,13 @@ jobs:
           trivy-config: trivy.yaml
 
   build-image:
+    name: Build Image Docker 
     needs: prepare-scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Prepare
-        id: prep
-        run: |
-          TAG=$(echo $GITHUB_SHA | head -c7)
-          IMAGE="airist/laracamp"
-          echo ::set-output name=tagged_image::${IMAGE}:${TAG}
-          echo ::set-output name=tag::${TAG}
-          
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@master
@@ -61,14 +57,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
-      - name: Build production image
+      - name: Build Image Docker
         uses: docker/build-push-action@v2
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
           file: Dockerfile
           push: true # This would be set to true in a real world deployment scenario.
-          tags: ${{ steps.prep.outputs.tagged_image }}
+          tags: ${{ inputs.docker_image }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
@@ -91,6 +87,7 @@ jobs:
         run: docker images 
 
   trivy-scan:
+    name: Trivy Scan Image Docker
     needs: build-image
     runs-on: ubuntu-latest
     steps:

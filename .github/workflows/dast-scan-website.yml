@@ -1,0 +1,29 @@
+name: DAST Scanning Wesbite with Zaproxy
+
+on:
+  workflow_call:
+    inputs:
+      website:
+        description: 'Website Production'
+        required: true
+        type: string
+
+    secrets:
+      client_id:
+        required: true
+      api_key:
+        required: true
+
+jobs:
+  soos_dast_baseline_analysis:
+    name: SOOS DAST Baseline Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run SOOS DAST Baseline Analysis
+        uses: soos-io/soos-dast-github-action@v2 # GET Latest Version from https://github.com/marketplace/actions/soos-dast
+        with:
+          client_id: ${{ secrets.client_id }}
+          api_key: ${{ secrets.api_key }}
+          project_name: "DAST-Laracamp Website"
+          scan_mode: "baseline"
+          target_url: ${{ inputs.website }}

@@ -54,6 +54,9 @@ ENV APP_ENV=production
 ENV DB_CONNECTION=mysql
 # ENV DB_HOST=localhost
 ENV DB_PORT=3306
+ENV DB_DATABASE=laracamp_db
+ENV DB_USERNAME=laracamp_user
+ENV DB_PASSWORD=laracamp_pw
 
 # copy source laravel
 COPY . .
@@ -65,10 +68,13 @@ COPY . .
 RUN mkdir -p public/storage && \
     chmod -R 777 storage/* && \
     chmod -R 777 public/storage && \
-    chmod -R 777 .docker/* && \
-    composer install --no-interaction --optimize-autoloader --no-dev
-    # install dependency laravel
-
+    chmod -R 777 .docker/*
+# install dependency laravel
+RUN composer install --no-interaction --optimize-autoloader --no-dev && \
+    php artisan package:discover --ansi && \
+    php artisan key:generate --ansi --force && \
+    php artisan optimize
+    
 VOLUME ${APP_SOURCE}/storage
 # expose port default 80
 EXPOSE 80/tcp

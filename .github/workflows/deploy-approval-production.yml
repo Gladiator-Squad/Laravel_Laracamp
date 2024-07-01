@@ -1,0 +1,24 @@
+name: Approval for Deploying to Production
+
+on:
+  workflow_call:
+    secrets:
+      GIT_HUB_TOKEN:
+        required: true
+
+jobs:
+  approval-staging:
+    runs-on: ubuntu-latest
+    name: Approval Deploy to Production
+    steps:
+      - name: Checkout
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GIT_HUB_TOKEN }}
+          approvers: pandudw,wapol4
+          minimum-approvals: 1
+          issue-title: "Deploying ${{ github.event.release.tag_name }} to prod from staging"
+          issue-body: "Please approve or deny the deployment of version ${{ github.event.release.tag_name }}."
+          exclude-workflow-initiator-as-approver: false
+          additional-approved-words: ''
+          additional-denied-words: ''

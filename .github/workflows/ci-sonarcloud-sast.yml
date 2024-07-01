@@ -9,8 +9,8 @@ on:
         required: true
 
 jobs:
-  sast-sonarcloud-analysis:
-    name: SonarCloud
+  sonarcloud:
+    name: SonarCloud Scanner Code Quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

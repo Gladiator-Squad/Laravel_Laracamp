@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y \
   zlib1g-dev \
   libpng-dev \
   libzip-dev && \
-rm -r /var/lib/apt/lists/*
+rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
 # install extension for laravel 8
 RUN docker-php-ext-install mbstring fileinfo exif pcntl bcmath gd mysqli pdo_mysql && \
     docker-php-ext-enable mbstring fileinfo exif pcntl bcmath gd mysqli pdo_mysql && \
@@ -38,13 +39,11 @@ COPY .docker/php-artisan-migrate-foreground .docker/php-artisan-migrate
 
 CMD [".docker/apache2-foreground"]
 
-WORKDIR /var/www/php
-
 FROM php_laravel AS executeable
 ENV APP_SOURCE /var/www/php
 ENV APP_DEBUG=false
 ENV APP_URL=""
-ENV APP_ENV=production
+ENV APP_ENV=local
 ENV DB_CONNECTION=mysql
 # ENV DB_HOST=localhost
 ENV DB_PORT=3306
