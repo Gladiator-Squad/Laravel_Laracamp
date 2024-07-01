@@ -52,44 +52,9 @@ jobs:
   #     ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
   #     ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
-  # dast-test:
-  #   needs: deploy-staging
-  #   uses: ./.github/workflows/dast-scan-website.yml
-  #   secrets:
-  #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
-  #     api_key: ${{ secrets.SOOS_API_KEY }}
-
-  notifyTelegram:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify Failure
-        if: failure()
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            🚨 **CI/CD Pipeline Notification** 🚨
-            
-            **Event**: ${{ github.event_name }}
-            **Workflow**: *${{ github.workflow }}*
-            **Branch**: *${{ github.ref_name }}*
-            **Status**: *Failed* ❌
-
-            **More info**: [GitHub Actions Run](${{ github.run_url }})
-
-      - name: Notify Cancelled
-        if: cancelled()
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            ⚠️ **CI/CD Pipeline Notification** ⚠️
-            
-            **Event**: ${{ github.event_name }}
-            **Workflow**: *${{ github.workflow }}*
-            **Branch**: *${{ github.ref_name }}*
-            **Status**: *Cancelled* ⛔️
-
-            **More info**: [GitHub Actions Run](${{ github.run_url }})
+  dast-test:
+    needs: deploy-staging
+    uses: ./.github/workflows/dast-scan-website.yml
+    secrets:
+      client_id: ${{ secrets.SOOS_CLIENT_ID }}
+      api_key: ${{ secrets.SOOS_API_KEY }}
