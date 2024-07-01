@@ -10,6 +10,8 @@ jobs:
   approval-staging:
     runs-on: ubuntu-latest
     name: Approval Deploy to Production
+    environment:
+      name: Production
     steps:
       - name: Checkout
         uses: trstringer/manual-approval@v1

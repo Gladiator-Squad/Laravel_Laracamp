@@ -107,6 +107,8 @@
 #         uses: github/codeql-action/upload-sarif@v3
 #         with:
 #           sarif_file: 'trivy-results.sarif'
+
+
 #   soos-sca-analysis:
 #     name: SOOS SCA Scan
 #     runs-on: ubuntu-latest

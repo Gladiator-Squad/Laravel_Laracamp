@@ -27,6 +27,8 @@ jobs:
   update-manifest:
     name: Update Manifest Kubernetes Laracamp
     runs-on: ubuntu-latest
+    environment:
+      name: Staging
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v3
