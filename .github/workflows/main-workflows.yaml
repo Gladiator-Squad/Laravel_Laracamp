@@ -52,9 +52,21 @@ jobs:
   #     ARGOCD_USER: ${{ secrets.ARGOCD_USER }} 
   #     ARGOCD_PASS: ${{ secrets.ARGOCD_PASS }} 
 
-  dast-test:
-    needs: deploy-staging
-    uses: ./.github/workflows/dast-scan-website.yml
-    secrets:
-      client_id: ${{ secrets.SOOS_CLIENT_ID }}
-      api_key: ${{ secrets.SOOS_API_KEY }}
+  # dast-test:
+  #   needs: deploy-staging
+  #   uses: ./.github/workflows/dast-scan-website.yml
+  #   secrets:
+  #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
+  #     api_key: ${{ secrets.SOOS_API_KEY }}
+
+  notifyTelegram:
+    runs-on: ubuntu-latest
+    steps:
+    - name: send custom message
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          The ${{ github.event_name }} event triggered final step.
+          echo This event is a pull request that had an assignee removed.
