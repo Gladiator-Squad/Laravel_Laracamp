@@ -59,61 +59,18 @@ jobs:
   #     client_id: ${{ secrets.SOOS_CLIENT_ID }}
   #     api_key: ${{ secrets.SOOS_API_KEY }}
   
-  notify-on-telegram:
+  notify-on-release:
     runs-on: ubuntu-latest
-    env:
-      BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      TELEGRAM_CHATID: ${{ secrets.TELEGRAM_CHAT_ID }}
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set Variables
-        id: vars
-        run: |
-          echo "BRANCH_NAME=$(echo ${{ github.ref_name }} | sed 's/refs\/heads\///')" >> $GITHUB_ENV
-          echo "JOB_NAME=${{ github.workflow }}" >> $GITHUB_ENV
-          echo "RUN_URL=${{ github.run_url }}" >> $GITHUB_ENV
-
-      - name: Notify Success
-        if: success()
-        run: |
-          MESSAGE=$(cat <<EOF
-Dear team :
-CICD Pipeline *${{ env.JOB_NAME }}*
-Branch : *${{ env.BRANCH_NAME }}*
-Status job : *Success*
-Total Time : *N/A*
-More info at : ${{ env.RUN_URL }}
-EOF
-          )
-          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$TELEGRAM_CHATID -d parse_mode=markdown -d text="$MESSAGE"
-
-      - name: Notify Failure
-        if: failure()
-        run: |
-          MESSAGE=$(cat <<EOF
-Dear team :
-CICD Pipeline *${{ env.JOB_NAME }}*
-Branch : *${{ env.BRANCH_NAME }}*
-Status job : *Failed*
-Total Time : *N/A*
-More info at : ${{ env.RUN_URL }}
-EOF
-          )
-          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$TELEGRAM_CHATID -d parse_mode=markdown -d text="$MESSAGE"
-
-      - name: Notify Cancelled
-        if: cancelled()
-        run: |
-          MESSAGE=$(cat <<EOF
-Dear team :
-CICD Pipeline *${{ env.JOB_NAME }}*
-Branch : *${{ env.BRANCH_NAME }}*
-Status job : *Aborted*
-Total Time : *N/A*
-More info at : ${{ env.RUN_URL }}
-EOF
-          )
-          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$TELEGRAM_CHATID -d parse_mode=markdown -d text="$MESSAGE"
+      - name: Send Telegram Notification on New Release
+        uses: cbrgm/telegram-github-action@v1
+        with:
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          message: |
+            🚀 New Release Published!
+            Release Name: ${{ github.event.release.name }}
+            Tag: ${{ github.event.release.tag_name }}
+            Actor: ${{ github.actor }}
+            Repository: ${{ github.repository }}
+            Check it out: ${{ github.event.release.html_url }}j
