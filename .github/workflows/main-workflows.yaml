@@ -70,3 +70,7 @@ jobs:
         message: |
           The ${{ github.event_name }} event triggered final step.
           echo This event is a pull request that had an assignee removed.
+          Dear team :
+          CICD Pipeline *${{ github.workflow }}*
+          Branch : *${{ github.ref_name }}*
+          Status job : *Success*
