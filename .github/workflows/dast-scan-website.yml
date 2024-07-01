@@ -21,19 +21,3 @@ jobs:
           project_name: "DAST-Laracamp Website"
           scan_mode: "baseline"
           target_url: "https://www.scorecardresearch.com/"
-
-      - name: Notify Failure
-        if: failure()
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            🚨 **CI/CD Pipeline Notification** 🚨
-            
-            **Event**: ${{ github.event_name }}
-            **Workflow**: *${{ github.workflow }}*
-            **Branch**: *${{ github.ref_name }}*
-            **Status**: *Failed* ❌
-
-            **More info**: [GitHub Actions Run](${{ github.run_url }})
