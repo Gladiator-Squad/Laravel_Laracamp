@@ -20,7 +20,7 @@ on:
 
 jobs:
   update-manifest:
-    name: Update Manifest Kubernetes
+    name: Update Manifest Kubernetes Laracamp
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code Repository
@@ -38,18 +38,6 @@ jobs:
           token: ${{ secrets.GIT_HUB_TOKEN }}
           path: central-manifest
 
-      - name: Install yq
-        run: |
-          sudo apt-get update && sudo apt-get install -y python3-pip
-          pip3 install yq
-
-      - name: Debug List directories
-        run: |
-          ls -alh
-          ls -alh central-manifest
-          ls -alh central-manifest/laracamp_deployment
-          ls -alh central-manifest/laracamp_deployment/staging
-
       - name: modify the image
         run: |
           cd central-manifest/
@@ -65,6 +53,15 @@ jobs:
           GIT_PASSWORD: ${{ secrets.GIT_HUB_TOKEN }}
           RUN_NUMBER: ${{ github.run_number }}          
 
+      - name: send custom message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            The ${{ github.event_name }} event triggered final step.
+            echo This event is a pull request that had an assignee removed.
+            
       # - name: Telegram Notification
       #   if: ${{ failure() }}
       #   uses: xinthink/action-telegram@v1.1
