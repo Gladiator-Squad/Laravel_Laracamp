@@ -60,14 +60,13 @@ jobs:
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
 
   dast-website-staging:
-    # needs: deploy-staging
+    needs: deploy-staging
     uses: ./.github/workflows/dast-scan-website.yml
     with:
       website: 'http://testphp.vulnweb.com/'
     secrets:
       client_id: ${{ secrets.SOOS_CLIENT_ID }}
       api_key: ${{ secrets.SOOS_API_KEY }}
-      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
 
   unit-test-prod:
     if: github.event_name == 'release'
@@ -83,13 +82,13 @@ jobs:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-  approval-deploy-prod:
-    # if: github.event_name == 'release'
-    name: Create Pull Request to Production
-    # needs: build-image-production
-    uses: ./.github/workflows/deploy-approval-production.yml
-    secrets:
-      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
+  # approval-deploy-prod:
+  #   # if: github.event_name == 'release'
+  #   name: Create Pull Request to Production
+  #   # needs: build-image-production
+  #   uses: ./.github/workflows/deploy-approval-production.yml
+  #   secrets:
+  #     GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
 
   deploy-production:
     if: github.event_name == 'release'
