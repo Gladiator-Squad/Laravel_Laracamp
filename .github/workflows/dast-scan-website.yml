@@ -15,15 +15,18 @@ on:
         required: true
 
 jobs:
-  soos_dast_baseline_analysis:
-    name: SOOS DAST Baseline Analysis
+  zap_scan:
     runs-on: ubuntu-latest
+    name: Scan the web application
     steps:
-      - name: Run SOOS DAST Baseline Analysis
-        uses: soos-io/soos-dast-github-action@v2 # GET Latest Version from https://github.com/marketplace/actions/soos-dast
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          client_id: ${{ secrets.client_id }}
-          api_key: ${{ secrets.api_key }}
-          project_name: "DAST-Laracamp Website"
-          scan_mode: "baseline"
-          target_url: ${{ inputs.website }}
+          ref: main
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.6.1
+        with:
+          docker_name: 'owasp/zap2docker-stable'
+          target:  ${{ inputs.website }}
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
