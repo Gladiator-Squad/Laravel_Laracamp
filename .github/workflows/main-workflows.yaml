@@ -67,6 +67,7 @@ jobs:
     secrets:
       client_id: ${{ secrets.SOOS_CLIENT_ID }}
       api_key: ${{ secrets.SOOS_API_KEY }}
+      GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }} 
 
   # unit-test-prod:
   #   if: github.event_name == 'release'
